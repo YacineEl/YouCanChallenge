@@ -13,6 +13,8 @@ Part I: Data Exploration & SQL Query Optimization
     -> The file .\src\analysis\report\query_plan_analysis.txt will contain an expolarion of the approach of the optimization:
         . Bottlenecks + Indexes that should be added
 
+2 - Explore the preformance of the sql quries after indexing: 
+
     -> run the script: .\src\data\indexing.py
         . This script will add the indexes mentionned in the query_plan_analysis.txt file. 
 
