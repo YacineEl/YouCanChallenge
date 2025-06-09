@@ -1,0 +1,53 @@
+weekly_active_users Query Analysis:
+
+Before Indexing:
+    . Execution time: 2.43s
+
+Key Bottlenecks: 
+    . Parallel Seq Scan on event table [full table scan]
+    . Sort on (date_trunc('week', timestamp), user_id)
+
+=> Indexes to be added on events table: 
+    . index on date_trunc('week', timestamp)
+    . Composite Index on date_trunc('week', timestamp) + user_id
+    . user_id 
+
+After Indexing:
+    Performance Improvement:
+    . Execution time reduced to 0.93s
+    . Index Scan using idx_events_week_user replaced Parallel Seq Scan
+    . Sort operation eliminated
+
+
+-----------------------------------------------------------
+
+revenue_per_category Query Analysis:
+
+Before Indexing:
+    . Execution time: 0.14s
+
+Key Bottlenecks:
+    . Parallel Seq Scan on events table [full table scan] with Filter: event_type = 'purchased'
+    . Seq Scan on products table [full table scan]
+    . Hash Join between events and products
+    . Sort on total_revenue (sum of price)
+
+=> Indexes to be added:
+    . index on events(event_type) to optimize the filter
+    . index on events(product_id) for the join condition
+    . index on products(product_id) for the join condition 
+    . composite index on events(event_type, product_id) to optimize both filter and join
+
+After Indexing:
+    Performance Improvement:
+    . Execution time reduced to 0.05s
+    . Index Only Scan using idx_events_type_product replaced Parallel Seq Scan
+    . Hash Join cost reduced
+    . Overall cost reduced significantly
+
+Remaining Bottleneck:
+    . Seq Scan on products table: *** The index already exists but still performing the Seq Scan! ***
+
+
+
+

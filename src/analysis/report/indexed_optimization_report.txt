@@ -1,0 +1,24 @@
+Query Optimization Report
+======================
+
+Query: weekly_active_users
+Original execution time: 0.93s
+Execution Plan:
+GroupAggregate  (cost=0.42..95393.68 rows=930660 width=16)
+  Group Key: date_trunc('week'::text, "timestamp")
+  ->  Index Scan using idx_events_week_user on events e  (cost=0.42..78760.43 rows=1000000 width=45)
+
+Query: revenue_per_category
+Original execution time: 0.05s
+Execution Plan:
+Sort  (cost=3013.94..3013.96 rows=8 width=16)
+  Sort Key: (sum(p.price)) DESC
+  ->  HashAggregate  (cost=3013.74..3013.82 rows=8 width=16)
+        Group Key: p.category
+        ->  Hash Join  (cost=148.93..2516.91 rows=99367 width=16)
+              Hash Cond: ((e.product_id)::text = (p.product_id)::text)
+              ->  Index Only Scan using idx_events_type_product on events e  (cost=0.42..2107.35 rows=99367 width=10)
+                    Index Cond: (event_type = 'purchased'::text)
+              ->  Hash  (cost=86.00..86.00 rows=5000 width=26)
+                    ->  Seq Scan on products p  (cost=0.00..86.00 rows=5000 width=26)
+
