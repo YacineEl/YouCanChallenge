@@ -2,14 +2,14 @@ Query Optimization Report
 ======================
 
 Query: weekly_active_users
-Original execution time: 0.93s
+Original execution time: 0.88s
 Execution Plan:
 GroupAggregate  (cost=0.42..95393.68 rows=930660 width=16)
   Group Key: date_trunc('week'::text, "timestamp")
   ->  Index Scan using idx_events_week_user on events e  (cost=0.42..78760.43 rows=1000000 width=45)
 
 Query: revenue_per_category
-Original execution time: 0.05s
+Original execution time: 0.04s
 Execution Plan:
 Sort  (cost=3013.94..3013.96 rows=8 width=16)
   Sort Key: (sum(p.price)) DESC

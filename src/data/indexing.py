@@ -3,24 +3,19 @@ import sys
 from sqlalchemy import create_engine, text
 import logging
 
-# Configure logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-# Database configuration
 DB_USER = os.getenv('DB_USER', 'itversity_retail_user')
 DB_PASSWORD = os.getenv('DB_PASSWORD', 'itversity')
 DB_HOST = os.getenv('DB_HOST', 'localhost')
 DB_PORT = os.getenv('DB_PORT', '5432')
 DB_NAME = os.getenv('DB_NAME','youcan')
 
-# Create database URL
 DATABASE_URL = f"postgresql://{DB_USER}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_NAME}"
 
-# Create SQLAlchemy engine
 engine = create_engine(DATABASE_URL)
 
-# Index definitions
 INDEXES = {
     # Indexes for weekly_active_users query
     'idx_events_week': """
@@ -61,7 +56,6 @@ INDEXES = {
 }
 
 def create_indexes():
-    """Create all defined indexes."""
     try:
         with engine.connect() as conn:
             for index_name, index_sql in INDEXES.items():
@@ -74,7 +68,6 @@ def create_indexes():
         raise
 
 def drop_indexes():
-    """Drop all created indexes."""
     try:
         with engine.connect() as conn:
             for index_name in INDEXES.keys():
@@ -87,10 +80,8 @@ def drop_indexes():
         raise
 
 if __name__ == "__main__":
-    # Drop existing indexes first to ensure clean state
+
     drop_indexes()
-    
-    # Create new indexes
     create_indexes()
     
     logger.info("Index creation completed successfully") 
