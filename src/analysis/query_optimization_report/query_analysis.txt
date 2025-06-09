@@ -1,0 +1,17 @@
+weekly_active_users query: 
+
+    -> Original Query: 
+        . DATE_TRUNC('week', e.timestamp) in SELECT, GROUP BY, and ORDER BY. 
+            - This just a repeated recalculation
+
+    -> Implemented Optimization: 
+        . Using CTEs to avoid the recalculation
+
+revenue_per_category query:
+
+    -> Original Query:
+        . Where condition after the join, we will do a join on all the rows even when we are only interested in the ones with [event_type = 'purchased']
+        . We only need the product_id from the table events to perform the join, not all the rows of the table
+
+    -> Implemented Optimization:
+        . Created a purchased_events CTE that filters events before joining and choosing only the column we need from the table events [product_id]

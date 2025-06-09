@@ -1,0 +1,51 @@
+Query Optimization Report
+======================
+
+Query: weekly_active_users
+Original execution time: 0.98s
+Optimized execution time: 0.74s
+Performance improvement: 24.56%
+
+Original Query Plan:
+GroupAggregate  (cost=0.42..95393.68 rows=930660 width=16)
+  Group Key: date_trunc('week'::text, "timestamp")
+  ->  Index Scan using idx_events_week_user on events e  (cost=0.42..78760.43 rows=1000000 width=45)
+
+Optimized Query Plan:
+GroupAggregate  (cost=0.42..95393.68 rows=930660 width=16)
+  Group Key: date_trunc('week'::text, events."timestamp")
+  ->  Index Scan using idx_events_week_user on events  (cost=0.42..78760.43 rows=1000000 width=45)
+
+----------------------------------------
+
+Query: revenue_per_category
+Original execution time: 0.04s
+Optimized execution time: 0.03s
+Performance improvement: 16.63%
+
+Original Query Plan:
+Sort  (cost=3013.94..3013.96 rows=8 width=16)
+  Sort Key: (sum(p.price)) DESC
+  ->  HashAggregate  (cost=3013.74..3013.82 rows=8 width=16)
+        Group Key: p.category
+        ->  Hash Join  (cost=148.93..2516.91 rows=99367 width=16)
+              Hash Cond: ((e.product_id)::text = (p.product_id)::text)
+              ->  Index Only Scan using idx_events_type_product on events e  (cost=0.42..2107.35 rows=99367 width=10)
+                    Index Cond: (event_type = 'purchased'::text)
+              ->  Hash  (cost=86.00..86.00 rows=5000 width=26)
+                    ->  Seq Scan on products p  (cost=0.00..86.00 rows=5000 width=26)
+
+Optimized Query Plan:
+Sort  (cost=3013.94..3013.96 rows=8 width=16)
+  Sort Key: (sum(p.price)) DESC
+  ->  HashAggregate  (cost=3013.74..3013.82 rows=8 width=16)
+        Group Key: p.category
+        ->  Hash Join  (cost=148.93..2516.91 rows=99367 width=16)
+              Hash Cond: ((events.product_id)::text = (p.product_id)::text)
+              ->  Index Only Scan using idx_events_type_product on events  (cost=0.42..2107.35 rows=99367 width=10)
+                    Index Cond: (event_type = 'purchased'::text)
+              ->  Hash  (cost=86.00..86.00 rows=5000 width=26)
+                    ->  Seq Scan on products p  (cost=0.00..86.00 rows=5000 width=26)
+
+----------------------------------------
+
