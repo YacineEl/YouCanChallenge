@@ -1,0 +1,2 @@
+1- Create Tables [No Index for now]
+2- Populate db 
