@@ -1,0 +1,19 @@
+Cohort Analysis Report
+===================
+
+Overall Retention Metrics:
+Average 8-week retention: 9.1%
+Median 8-week retention: 10.9%
+
+Best performing cohort: 2024-06
+8-week retention: 13.3%
+
+Retention Trends:
+Week 0 average retention: 100.0%
+Week 1 average retention: 83.5%
+Week 2 average retention: 68.7%
+Week 3 average retention: 53.4%
+Week 4 average retention: 38.6%
+Week 5 average retention: 26.5%
+Week 6 average retention: 16.7%
+Week 7 average retention: 9.1%

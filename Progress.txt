@@ -32,3 +32,9 @@ Part I: Data Exploration & SQL Query Optimization
 
     -> run the script: src\analysis\optimizied_query_benchmarking.py
         . This script will output a report on the performances on the queries: src\analysis\query_optimization_report\optimizated_query_report.txt
+
+
+
+Part II
+
+- Update generationg approach 
