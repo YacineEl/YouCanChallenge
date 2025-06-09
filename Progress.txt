@@ -1,2 +1,23 @@
-1- Create Tables [No Index for now]
-2- Populate db 
+1 - Create Tables [No Index for now]: .\src\database\setup.py
+2 - Populate db : .\src\data\generate_data.py
+
+
+Part I: Data Exploration & SQL Query Optimization
+
+1 - Explore the preformance of the sql quries before indexing: 
+
+    -> run the script: .\src\analysis\query_benchmarking.py
+        . The scripts will output: 
+            . Report of execution plan fro both query 'no_indexing_optimization_report.txt'
+
+    -> The file .\src\analysis\report\query_plan_analysis.txt will contain an expolarion of the approach of the optimization:
+        . Bottlenecks + Indexes that should be added
+
+    -> run the script: .\src\data\indexing.py
+        . This script will add the indexes mentionned in the query_plan_analysis.txt file. 
+
+    -> rerun the script: .\src\analysis\query_benchmarking.py [modified the name of output files] 
+        . The scripts will output: 
+            . Report of execution plan fro both query 'indexed_optimization_report.txt'
+
+    -> return to the file .\src\analysis\report\query_plan_analysis.txt for the analysis of the results
